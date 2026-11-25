@@ -1,0 +1,40 @@
+# Sobe a aplicacao completa (Java + OpenCV + Tesseract) com PostgreSQL. Precisa de internet (API do YGOPRODeck).
+#   docker compose up --build          -> http://localhost:8080
+# Para usar IA, defina antes (exemplo):  IA_PROVEDOR=openai  OPENAI_API_KEY=sk-...
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: cartas
+      POSTGRES_USER: cartas
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-cartas-local}
+    ports:
+      - "5432:5432"
+    volumes:
+      - dados-postgres-cartas:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cartas -d cartas"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  app:
+    build: .
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      DB_HOST: postgres
+      DB_NAME: cartas
+      DB_USER: cartas
+      DB_PASSWORD: ${DB_PASSWORD:-cartas-local}
+      IA_PROVEDOR: ${IA_PROVEDOR:-regex}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+
+volumes:
+  dados-postgres-cartas:

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Verificador de Cartas Yu-Gi-Oh!</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topo">
+  <div class="ornamento"><span class="losango"></span></div>
+  <h1>Sistema de Verificação de Cartas</h1>
+  <p class="sub">Yu-Gi-Oh! &middot; Java + OpenCV + Tesseract + IA + YGOPRODeck API</p>
+  <div id="status" class="status"></div>
+</header>
+
+<main>
+  <section class="cartao entrada">
+    <div class="abas">
+      <button class="aba ativa" data-aba="arquivo">Enviar arquivo</button>
+      <button class="aba" data-aba="texto">Colar texto</button>
+    </div>
+
+    <form id="formArquivo" class="painel-aba">
+      <label class="soltar" id="areaSoltar">
+        <input type="file" id="arquivo" accept=".pdf,.png,.jpg,.jpeg,.txt" hidden>
+        <strong>Arraste a foto da carta aqui</strong>
+        <span>ou clique para escolher (PNG, JPG, PDF ou TXT, até 10 MB). Carta em pé, sem reflexo no texto</span>
+        <em id="nomeArquivo"></em>
+      </label>
+    </form>
+
+    <form id="formTexto" class="painel-aba oculto">
+      <div class="exemplos">
+        <span>Exemplos:</span>
+        <button type="button" data-ex="valida">Válida</button>
+        <button type="button" data-ex="atkAlterado">ATK alterado</button>
+        <button type="button" data-ex="setDeOutraCarta">Set de outra carta</button>
+        <button type="button" data-ex="passcodeDeOutraCarta">Passcode de outra carta</button>
+        <button type="button" data-ex="ocrRuim">OCR ruim</button>
+        <button type="button" data-ex="incompleta">Incompleta</button>
+      </div>
+      <textarea id="texto" rows="8" placeholder="Cole aqui o texto lido da carta (nome, código do set, ATK/DEF, passcode)"></textarea>
+    </form>
+
+    <div class="linha">
+      <span class="dica">As cartas são conferidas no banco oficial do YGOPRODeck.</span>
+      <button id="validar" class="primario">Verificar carta</button>
+    </div>
+    <p id="erro" class="erro"></p>
+  </section>
+
+  <section id="pipeline" class="pipeline"></section>
+
+  <section id="detalhes" class="detalhes oculto">
+    <div class="cartao">
+      <h3>2 · Imagens tratadas (OpenCV)</h3>
+      <div id="imagem" class="imagem"><span class="vazio">Sem imagem (entrada em texto)</span></div>
+    </div>
+    <div class="cartao">
+      <h3>3 · Texto extraído (Tesseract)</h3>
+      <pre id="textoExtraido"></pre>
+    </div>
+    <div class="cartao">
+      <h3>4 · O que foi lido (<span id="interpretador"></span>)</h3>
+      <pre id="json"></pre>
+    </div>
+    <div class="cartao">
+      <h3>5 · Carta oficial (YGOPRODeck)</h3>
+      <div id="oficial"></div>
+    </div>
+    <div class="cartao resultado-cartao largo">
+      <h3>6 · Resultado da verificação</h3>
+      <div id="resultado"></div>
+    </div>
+  </section>
+
+  <section class="cartao">
+    <div class="titulo-historico">
+      <h3>Histórico (salvo no banco)</h3>
+      <button id="atualizar" class="secundario">Atualizar</button>
+    </div>
+    <table>
+      <thead><tr><th>#</th><th>Data</th><th>Arquivo</th><th>Carta oficial</th><th>Extração</th><th>Status</th></tr></thead>
+      <tbody id="historico"></tbody>
+    </table>
+  </section>
+</main>
+<script src="app.js"></script>
+</body>
+</html>

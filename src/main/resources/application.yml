@@ -1,0 +1,75 @@
+spring:
+  application:
+    name: validador-cartas
+  profiles:
+    default: dev
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+
+app:
+  # Etapa 2 - OpenCV (script Python que acha a carta na foto, endireita e gera as imagens do OCR).
+  # Desabilite se nao tiver Python + opencv-python instalados.
+  opencv:
+    habilitado: ${OPENCV_HABILITADO:true}
+    comando: ${OPENCV_COMANDO:python3 scripts/preprocessar.py}   # no Windows: python scripts/preprocessar.py
+    timeout-segundos: 60
+
+  # Etapa 3 - Tesseract (executavel instalado na maquina). Cartas do TCG em ingles: "eng".
+  # Para cartas em portugues: OCR_IDIOMA=eng+por (precisa do idioma "por" instalado).
+  ocr:
+    comando: ${TESSERACT_COMANDO:tesseract}
+    idioma: ${OCR_IDIOMA:eng}
+    psm: 11           # 11 = texto espalhado em qualquer posicao (o nome usa psm 7, definido no codigo)
+    tessdata: ${TESSDATA_PREFIX_DIR:}
+    timeout-segundos: 60
+
+  # Etapa 4 - IA. provedor: regex (sem IA) | openai | gemini | claude
+  # As chaves vem SO de variaveis de ambiente, nunca ficam no repositorio.
+  ia:
+    provedor: ${IA_PROVEDOR:regex}
+    openai:
+      api-key: ${OPENAI_API_KEY:}
+      modelo: ${OPENAI_MODELO:gpt-4o-mini}
+    gemini:
+      api-key: ${GEMINI_API_KEY:}
+      modelo: ${GEMINI_MODELO:gemini-2.5-flash}
+    claude:
+      api-key: ${ANTHROPIC_API_KEY:}
+      modelo: ${CLAUDE_MODELO:claude-haiku-5-5}
+
+  # Etapa 5 - API do YGOPRODeck (publica, sem chave). Limite deles: 20 requisicoes/segundo.
+  ygoprodeck:
+    url: ${YGOPRODECK_URL:https://db.ygoprodeck.com/api/v7}
+    timeout-segundos: 15
+
+---
+# Perfil dev (padrao): H2 em arquivo na pasta ./dados - nao precisa instalar banco
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    url: jdbc:h2:file:./dados/verificacoes;AUTO_SERVER=TRUE
+    username: sa
+    password: ""
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+---
+# Perfil prod: PostgreSQL (docker compose up -d postgres)
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:cartas}
+    username: ${DB_USER:cartas}
+    password: ${DB_PASSWORD}

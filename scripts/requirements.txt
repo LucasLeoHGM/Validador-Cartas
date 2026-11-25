@@ -1,0 +1,6 @@
+opencv-python>=4.8
+numpy>=1.24
+pdf2image>=1.16
+# so para gerar os exemplos (scripts/gerar_exemplos.py)
+pillow>=10
+reportlab>=4

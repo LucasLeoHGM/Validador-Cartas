@@ -1,0 +1,164 @@
+:root {
+  /* paleta: preto, ciano/turquesa e azul */
+  --azul: #1f6fe0; --verde: #19d3c5; --roxo: #2a8fd6; --laranja: #22e0e0; --teal: #15b8c8; --violeta: #3b6fd8;
+  --fundo: #03080c; --painel: #0a1822; --painel2: #0e2230; --texto: #e6f6f8; --suave: #86a9b3; --borda: #17394a;
+  --ciano: #22e0e0;
+  --ok: #2ee6c0; --alerta: #f2c14e; --falha: #ff6b7a;
+  font-family: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+}
+* { box-sizing: border-box; }
+body { margin: 0; color: var(--texto); background: radial-gradient(ellipse 60% 40% at 45% 18%, rgba(34,224,224,.22), transparent 70%), radial-gradient(ellipse 50% 40% at 20% 90%, rgba(31,111,224,.28), transparent 70%), var(--fundo); background-attachment: fixed; }
+main { max-width: 1240px; margin: 0 auto; padding: 20px; display: grid; gap: 18px; }
+
+.topo { background: repeating-linear-gradient(90deg, rgba(34,224,224,.10) 0 34px, rgba(0,0,0,.25) 34px 68px), linear-gradient(120deg, #020608, #0b3a4a 55%, #0b4aa0); border-bottom: 1px solid var(--borda); color: #fff; padding: 22px 20px; text-align: center; }
+.topo h1 { margin: 0 0 4px; font-size: 1.6rem; }
+.topo p { margin: 0; opacity: .85; }
+.status { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 12px; }
+.status span { background: rgba(255,255,255,.14); border-radius: 99px; padding: 4px 12px; font-size: .82rem; }
+.status .off { background: rgba(255,120,120,.25); }
+
+.cartao { background: var(--painel); border: 1px solid var(--borda); border-radius: 12px; padding: 16px 18px; }
+.cartao h3 { margin: 0 0 10px; font-size: 1rem; }
+
+.abas { display: flex; gap: 6px; margin-bottom: 12px; }
+.aba { border: 1px solid var(--borda); background: var(--painel2); color: var(--texto); padding: 8px 14px; border-radius: 8px; cursor: pointer; font: inherit; }
+.aba.ativa { background: linear-gradient(90deg, var(--teal), var(--azul)); color: #fff; border-color: var(--ciano); }
+.oculto { display: none !important; }
+
+.soltar { display: flex; flex-direction: column; align-items: center; gap: 4px; border: 2px dashed #2b6477; border-radius: 12px;
+  padding: 28px; cursor: pointer; color: var(--suave); text-align: center; transition: .15s; }
+.soltar strong { color: var(--texto); font-size: 1.05rem; }
+.soltar.arrastando, .soltar:hover { border-color: var(--ciano); background: var(--painel2); }
+.soltar em { color: var(--ciano); font-style: normal; font-weight: 600; }
+
+.exemplos { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin-bottom: 8px; color: var(--suave); font-size: .9rem; }
+.exemplos button { border: 1px solid var(--borda); background: var(--painel2); color: var(--texto); border-radius: 99px; padding: 4px 12px; cursor: pointer; font: inherit; }
+.exemplos button:hover { border-color: var(--ciano); color: var(--ciano); }
+textarea { background: var(--fundo); color: var(--texto); width: 100%; font-family: Consolas, "Courier New", monospace; font-size: .9rem; border: 1px solid var(--borda); border-radius: 8px; padding: 10px; }
+
+.linha { display: flex; gap: 12px; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; margin-top: 14px; }
+.linha label { display: flex; flex-direction: column; gap: 4px; font-size: .85rem; color: var(--suave); }
+.linha input { background: var(--fundo); color: var(--texto); padding: 8px 10px; border: 1px solid var(--borda); border-radius: 8px; font: inherit; width: 200px; }
+.primario { background: linear-gradient(90deg, var(--teal), var(--azul)); box-shadow: 0 0 14px rgba(34,224,224,.35); color: #fff; border: 0; border-radius: 8px; padding: 11px 22px; font: inherit; font-weight: 600; cursor: pointer; }
+.primario:disabled { opacity: .6; cursor: wait; }
+.secundario { background: var(--painel2); color: var(--texto); border: 1px solid var(--borda); border-radius: 8px; padding: 6px 12px; cursor: pointer; font: inherit; }
+.erro { color: var(--falha); margin: 8px 0 0; min-height: 1em; }
+
+/* pipeline com as 6 etapas, nas cores do material */
+.pipeline { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
+.etapa { background: var(--painel); border: 1px solid var(--borda); border-top: 6px solid var(--cor); border-radius: 12px; padding: 12px; position: relative; min-height: 130px; }
+.etapa:not(:last-child)::after { content: "➜"; position: absolute; right: -13px; top: 42%; color: var(--ciano); font-size: 1rem; z-index: 1; }
+.etapa h4 { margin: 0 0 4px; color: var(--cor); font-size: .95rem; }
+.etapa .papel { font-size: .78rem; color: var(--suave); margin-bottom: 8px; }
+.etapa .detalhe { font-size: .8rem; line-height: 1.35; word-break: break-word; }
+.etapa .selo { display: inline-block; font-size: .7rem; font-weight: 700; border-radius: 99px; padding: 2px 8px; margin-bottom: 6px; }
+.etapa .tempo { font-size: .7rem; color: var(--suave); margin-top: 6px; }
+.selo.OK { background: rgba(46,230,192,.15); color: var(--ok); }
+.selo.FALLBACK { background: rgba(242,193,78,.15); color: var(--alerta); }
+.selo.IGNORADA { background: rgba(134,169,179,.15); color: var(--suave); }
+.selo.ERRO { background: rgba(255,107,122,.15); color: var(--falha); }
+.selo.AGUARDANDO { background: rgba(134,169,179,.15); color: var(--suave); }
+
+.detalhes { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+pre { background: var(--fundo); color: var(--texto); border: 1px solid var(--borda); border-radius: 8px; padding: 10px; margin: 0; white-space: pre-wrap;
+  font-size: .82rem; max-height: 300px; overflow: auto; }
+.imagem { background: var(--fundo); border: 1px solid var(--borda); border-radius: 8px; min-height: 120px; display: grid; place-items: center; overflow: hidden; }
+.imagem img { max-width: 100%; max-height: 300px; display: block; }
+.vazio { color: var(--suave); font-size: .85rem; }
+
+.veredito { display: flex; align-items: center; gap: 10px; font-size: 1.5rem; font-weight: 800; margin-bottom: 10px; }
+.veredito .icone { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; color: #03080c; font-size: 1.3rem; }
+.VERIFICADA { color: var(--ok); } .VERIFICADA .icone { background: var(--ok); }
+.INCONSISTENTE { color: var(--falha); } .INCONSISTENTE .icone { background: var(--falha); }
+.REVISAO_MANUAL { color: var(--alerta); } .REVISAO_MANUAL .icone { background: var(--alerta); }
+.regras { list-style: none; padding: 0; margin: 0; font-size: .9rem; }
+.regras li { padding: 3px 0; }
+.regras .sim::before { content: "✓ "; color: var(--ok); font-weight: 700; }
+.regras .nao::before { content: "✗ "; color: var(--falha); font-weight: 700; }
+.regras .aviso::before { content: "i "; color: var(--suave); font-weight: 700; }
+.regras .aviso { color: var(--suave); }
+
+.titulo-historico { display: flex; justify-content: space-between; align-items: center; }
+table { width: 100%; border-collapse: collapse; font-size: .88rem; }
+th, td { text-align: left; padding: 8px; border-bottom: 1px solid var(--borda); }
+tbody tr { cursor: pointer; }
+tbody tr:hover { background: var(--painel2); }
+.pilula { font-weight: 700; font-size: .75rem; }
+
+@media (max-width: 1000px) {
+  .pipeline { grid-template-columns: repeat(3, 1fr); }
+  .etapa::after { display: none; }
+  .detalhes { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) { .pipeline { grid-template-columns: repeat(2, 1fr); } }
+
+.dica { color: var(--suave); font-size: .85rem; }
+.largo { grid-column: 1 / -1; }
+.oficial dl { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; margin: 0; font-size: .9rem; }
+.oficial dt { color: var(--suave); }
+.oficial dd { margin: 0; font-weight: 600; word-break: break-word; }
+.oficial a { color: var(--ciano); }
+.miniaturas { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; padding: 8px; width: 100%; }
+.miniaturas figure { margin: 0; text-align: center; font-size: .75rem; color: var(--suave); }
+.miniaturas img { max-width: 100%; max-height: 190px; border: 1px solid var(--borda); }
+
+/* ===== tema "duelo": roxo profundo, bordas douradas, painéis chanfrados ===== */
+:root {
+  --azul: #5b8cff; --verde: #3ee0c8; --roxo: #b28cff; --laranja: #f0b94a; --teal: #4fc3f7; --violeta: #9a7cff;
+  --fundo: #0b0618; --painel: rgba(16,9,36,.88); --painel2: #1b1040; --texto: #f2ecff; --suave: #a99bd0; --borda: #6b4f1d;
+  --ouro: #f0b94a; --ouro2: #fbe08a; --ouro3: #a8741a; --ciano: #f0b94a;
+  --ok: #4be3a0; --alerta: #f0b94a; --falha: #ff6b7a;
+  --chanfro: polygon(14px 0, calc(100% - 14px) 0, 100% 14px, 100% calc(100% - 14px), calc(100% - 14px) 100%, 14px 100%, 0 calc(100% - 14px), 0 14px);
+}
+body {
+  background:
+    radial-gradient(ellipse 40% 50% at 8% 40%, rgba(130,70,255,.35), transparent 70%),
+    radial-gradient(ellipse 40% 50% at 92% 35%, rgba(60,110,255,.30), transparent 70%),
+    radial-gradient(ellipse 50% 30% at 50% 0%, rgba(240,185,74,.18), transparent 70%),
+    repeating-linear-gradient(135deg, rgba(255,255,255,.015) 0 2px, transparent 2px 14px),
+    linear-gradient(180deg, #120828, #0b0618 60%, #07030f);
+  background-attachment: fixed;
+}
+.topo { background: transparent; border: 0; padding: 18px 20px 6px; }
+.ornamento { display: flex; align-items: center; justify-content: center; gap: 14px; margin-bottom: 4px; }
+.ornamento::before, .ornamento::after { content: ""; height: 2px; width: min(220px, 25vw);
+  background: linear-gradient(90deg, transparent, var(--ouro)); }
+.ornamento::after { transform: scaleX(-1); }
+.losango { width: 12px; height: 12px; background: linear-gradient(135deg, var(--ouro2), var(--ouro3)); transform: rotate(45deg); box-shadow: 0 0 10px var(--ouro); }
+.topo h1 { font-family: "Trajan Pro", Cinzel, "Palatino Linotype", Georgia, serif; font-variant: small-caps; letter-spacing: .06em;
+  font-size: 2.1rem; font-weight: 700; margin: 0;
+  background: linear-gradient(180deg, #fff6d6, var(--ouro) 55%, var(--ouro3)); -webkit-background-clip: text; background-clip: text; color: transparent;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,.8)); }
+.topo .sub { margin-top: 6px; color: var(--suave); }
+.status span { background: rgba(20,12,48,.8); border: 1px solid #6a52c4; border-radius: 99px; box-shadow: inset 0 0 8px rgba(130,90,255,.35); }
+.status .off { background: rgba(120,20,40,.5); border-color: var(--falha); }
+
+/* molduras douradas com cantos chanfrados */
+.cartao, .etapa { border: 0; border-radius: 0; clip-path: var(--chanfro); position: relative;
+  background: linear-gradient(135deg, var(--ouro2), var(--ouro3) 40%, var(--ouro) 70%, var(--ouro3)); padding: 2px; }
+.cartao > *, .etapa > * { position: relative; z-index: 1; }
+.cartao::before, .etapa::before { content: ""; position: absolute; inset: 2px; z-index: 0; clip-path: var(--chanfro);
+  background: linear-gradient(180deg, rgba(27,16,64,.96), rgba(12,7,28,.97)); }
+.cartao { padding: 18px 22px; }
+.etapa { padding: 14px; border-top: 0; min-height: 130px; }
+.etapa::after { z-index: 2; color: var(--verde); }
+.etapa h4 { color: var(--cor); text-shadow: 0 0 8px var(--cor); }
+
+.aba { background: rgba(20,12,48,.8); border-color: #6a52c4; clip-path: polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px); }
+.aba.ativa { background: linear-gradient(180deg, var(--ouro2), var(--ouro) 50%, var(--ouro3)); color: #2a1600; border-color: var(--ouro2); font-weight: 700; }
+.soltar { border: 1px solid rgba(240,185,74,.55); border-radius: 4px;
+  background: radial-gradient(ellipse at center, rgba(120,70,255,.18), rgba(8,4,20,.6)); }
+.soltar strong { color: var(--ouro2); font-size: 1.15rem; }
+.soltar.arrastando, .soltar:hover { border-color: var(--ouro2); background: radial-gradient(ellipse at center, rgba(150,90,255,.3), rgba(8,4,20,.6)); }
+.primario { background: linear-gradient(180deg, var(--ouro2), var(--ouro) 50%, var(--ouro3)); color: #2a1600; border: 1px solid var(--ouro2);
+  box-shadow: 0 0 16px rgba(240,185,74,.55); text-shadow: 0 1px 0 rgba(255,255,255,.4); clip-path: polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px); }
+.secundario { border-color: #6a52c4; background: rgba(20,12,48,.8); }
+.exemplos button { border-color: #6a52c4; }
+.exemplos button:hover, .oficial a { color: var(--ouro2); border-color: var(--ouro); }
+textarea, .linha input { border-color: #6a52c4; background: rgba(6,3,16,.8); }
+pre, .imagem { background: rgba(6,3,16,.8); border-color: #4a3a8a; }
+th { color: var(--ouro2); }
+th, td { border-bottom-color: #3a2c70; }
+tbody tr:hover { background: rgba(120,80,255,.15); }
+.veredito .icone { color: #10081f; }
+.cartao h3 { color: var(--ouro2); font-family: "Palatino Linotype", Georgia, serif; font-variant: small-caps; letter-spacing: .04em; }
