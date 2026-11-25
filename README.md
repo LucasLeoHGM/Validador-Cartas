@@ -56,8 +56,6 @@ No Windows, defina `OPENCV_COMANDO=python` e, se preciso, `TESSERACT_COMANDO` co
 | GET | `/api/status` | OpenCV, Tesseract e IA disponíveis |
 | GET | `/api/exemplos` | textos de exemplo para demonstração |
 
-## Demonstração rápida
-Em `exemplos/` há 3 fotos sintéticas (geradas por `scripts/gerar_exemplos.py`): `carta-valida`, `carta-atk-alterado` (ATK diferente do oficial) e `carta-set-de-outra-carta`. Esperado: VERIFICADA, INCONSISTENTE, INCONSISTENTE.
 
 ## Decisões técnicas
 - **Limite da API (20 req/s):** intervalo mínimo de 70 ms + cache em memória.
